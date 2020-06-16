@@ -1,0 +1,19 @@
+自动生成测试用例 generate unit test For Function
+
+自动生成结构实例化 Fill struct
+
+自动实现接口 generate interface Stubs 输入参数
+
+自动增加tag add tags to struct fields
+
+查找接口的具体实现 F12
+
+重构方面的方法 F2
+
+选中多条件，extract to variable 再命名抽像的变量名
+
+非库包添加到文件，方便查看，add package to workspac
+
+
+
+

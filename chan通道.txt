@@ -1,0 +1,41 @@
+定义channel : make(chan 类型,容量)
+	chan:=make(chan string,1);
+	写端： ch <- "hello"  .写端写数据，该端不在读，写端阻塞
+	读端： str := <- ch   .读端读数据，同时写端不在写，该端阻塞
+
+channel同步，数据传递：
+	len(ch): channel 中剩余未读取数据个数，cap(ch):通道的容量
+
+无缓冲channel: 同步通信
+	创建： ch := make(chan int) // 通道容量默认为0，len=0,不能存放数据
+	channel 应用于两个go程中，一个读，另一个写
+	具备同步的能力，读写同步
+
+有缓冲channel: 异步通信
+	创建： ch := make(chan int,5)
+	通道容量为非0，len(ch);channel中剩余未读取数据个数，cap(ch);
+	通道的容量
+
+关闭channel: 无，有缓冲区
+	确定不再相对端发送，接收数据，关闭channel,使用close(ch)关闭channel
+	对端可以判断 channel 是否关闭
+		if num,ok:<-ch;ok == true{}
+		如果对端已经关闭，ok->false,num无数据
+		如果对端没有关闭，ok->true,num保存读到的数据
+	可以用range替代ok：
+		for num:=range ch{}    //ch 不能替换<-ch
+	总结 1 数据不发送完，不应该关闭
+	     2 已经关闭channel，不能再向其写数据，报错:panic
+	     3 写端已经关闭channel，可以从中读取数据。
+		该无缓冲channel： 读到0，说明：写端关闭
+		该有缓冲channel：如果缓冲区有数据，先读数据，读完数据后，可		以继续读。读到0
+
+单向channel：
+	默认的channel 是双向的，var ch chan int    ch = make(chan int)
+	单向写channel： var sendCh chan <-int  								sendCh = make(chan int)不能读操作
+	单向读channel： var renvCh <- chan int
+			renvCh = make(<- chan int)
+	转换：
+		1.双项channel 可以隐式转换为任意一种单向channel
+			sendCh = ch
+		2.单向channel 不能转换为双项channel
